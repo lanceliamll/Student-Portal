@@ -1,0 +1,26 @@
+Register Student mutation
+
+mutation(
+  $studentId: String,
+  $firstName:String,
+  $lastName: String,
+  $email: String,
+  $password: String
+) {
+  registerStudent(input: {
+  	studentId: $studentId,
+    firstName: $firstName,
+    lastName: $lastName,
+    email: $email,
+    password: $password
+  }) {
+    studentId
+    firstName
+    lastName
+    email
+    password
+  }
+}
+
+
+
