@@ -28,12 +28,8 @@ module.exports = gql`
   #   createdDate: String
   # }
 
-  input CreateStudentInput {
-    studentId: String
-    firstName: String
-    lastName: String
-    email: String
-    password: String
+  type Token {
+    token: String!
   }
 
   type Query {
@@ -41,13 +37,12 @@ module.exports = gql`
   }
 
   type Mutation {
-    registerStudent(input: CreateStudentInput!): Student
-    # addStudent(
-    #   studentId: String!
-    #   firstName: String!
-    #   lastName: String!
-    #   email: String!
-    #   password: String!
-    # ): Student
+    registerStudent(
+      studentId: String
+      firstName: String
+      lastName: String
+      email: String
+      password: String
+    ): Token
   }
 `;

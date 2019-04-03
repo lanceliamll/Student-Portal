@@ -1,4 +1,12 @@
 const Student = require("./models/Student");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+//Create Token
+const createToken = (student, secret, expiresIn) => {
+  const { studentId, password } = student;
+  return jwt.sign({ studentId, password }, secret, { expiresIn });
+};
 
 module.exports = {
   Query: {
@@ -11,11 +19,28 @@ module.exports = {
 
   Mutation: {
     //Register Students
-    registerStudent: async (root, args, ctx) => {
+    registerStudent: async (
+      root,
+      { studentId, firstName, lastName, email, password },
+      ctx
+    ) => {
+      //Verify if the Student ID is Unique
+      const student = await Student.findOne({ studentId });
+      if (student) {
+        throw new Error("Student already exists with this Student ID.");
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 12);
       const newStudent = await new Student({
-        ...args.input
+        studentId,
+        firstName,
+        lastName,
+        email,
+        password: hashedPassword
       }).save();
-      return newStudent;
+      return {
+        token: createToken(newStudent, process.env.SECRET, "1hr")
+      };
     }
   }
 };
