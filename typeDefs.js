@@ -44,5 +44,6 @@ module.exports = gql`
       email: String
       password: String
     ): Token
+    signinStudent(studentId: String, password: String): Token
   }
 `;

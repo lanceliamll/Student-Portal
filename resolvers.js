@@ -18,6 +18,25 @@ module.exports = {
   },
 
   Mutation: {
+    //Login Student
+    signinStudent: async (root, { studentId, password }, ctx) => {
+      const student = await Student.findOne({ studentId });
+
+      if (!student) {
+        throw new Error("Student not Found!");
+      }
+
+      const isValid = await bcrypt.compare(password, student.password);
+
+      if (!isValid) {
+        throw new Error("Incorrect Password!");
+      }
+
+      return {
+        token: createToken(student, process.env.SECRET, "1hr")
+      };
+    },
+
     //Register Students
     registerStudent: async (
       root,
